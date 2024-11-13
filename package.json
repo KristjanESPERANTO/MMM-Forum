@@ -1,0 +1,47 @@
+{
+  "name": "mmm-forum",
+  "version": "1.0.0",
+  "description": "A MagicMirror² module to display information from the MagicMirror² forum.",
+  "author": "Kristjan ESPERANTO (https://github.com/KristjanESPERANTO)",
+  "license": "ISC",
+  "keywords": [
+    "MagicMirror",
+    "forum",
+    "NodeBB"
+  ],
+  "main": "MMM-Forum.js",
+  "scripts": {
+    "lint": "eslint . && stylelint **/*.css && markdownlint . --ignore node_modules && prettier . --check",
+    "lint:fix": "eslint . --fix && stylelint **/*.css --fix && markdownlint . --ignore node_modules --fix && prettier . --write",
+    "prepare": "[ -f node_modules/.bin/husky ] && husky || echo husky is not installed.",
+    "release": "npx bumpp --no-push",
+    "test": "npm run lint && npm run test:spelling",
+    "test:spelling": "cspell ."
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "dayjs": "^1.11.13"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.14.0",
+    "@eslint/json": "^0.6.0",
+    "@eslint/markdown": "^6.2.1",
+    "@stylistic/eslint-plugin": "^2.10.1",
+    "cspell": "^8.16.0",
+    "eslint": "^9.14.0",
+    "eslint-plugin-import": "^2.31.0",
+    "globals": "^15.12.0",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "markdownlint-cli": "^0.42.0",
+    "prettier": "^3.3.3",
+    "stylelint": "^16.10.0",
+    "stylelint-config-standard": "^36.0.1",
+    "stylelint-prettier": "^5.0.2"
+  },
+  "lint-staged": {
+    "*.css": "stylelint --fix",
+    "*.js": "eslint --cache --fix",
+    "*.md": "markdownlint --ignore node_modules --fix"
+  }
+}

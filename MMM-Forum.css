@@ -1,0 +1,95 @@
+.MMM-Forum {
+  font-size: 0.75em;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+
+  .solved::before {
+    content: "✔";
+    margin-right: 0.5ch;
+  }
+
+  .topic-title,
+  .title,
+  .teaser {
+    margin-bottom: -0.5em;
+  }
+
+  .teaser {
+    font-style: italic;
+  }
+
+  .info,
+  .user,
+  .category,
+  .time {
+    display: inline-block;
+  }
+
+  .info > div {
+    margin-right: 0.5ch;
+    font-size: smaller;
+  }
+
+  .user::before {
+    content: "– 𝪅";
+    margin-right: 0.5ch;
+  }
+
+  .user::after,
+  .time::after,
+  .message-time::after,
+  .category::after {
+    content: "–";
+    margin-left: 0.5ch;
+  }
+
+  .message-time::before {
+    content: "–";
+    margin-right: 0.5ch;
+    margin-top: -0.5em;
+  }
+
+  .category::before {
+    content: "▭";
+    margin-right: 0.5ch;
+  }
+
+  .update {
+    font-size: smaller;
+    font-style: italic;
+  }
+
+  .header {
+    font-size: large;
+    font-weight: bold;
+    border-bottom-width: 1px;
+    border-bottom-style: dotted;
+    margin-top: 0.5em;
+
+    &::after,
+    &::before {
+      margin-left: 1ch;
+      margin-right: 1ch;
+    }
+  }
+
+  .topics-header::after,
+  .topics-header::before {
+    content: "🕮";
+  }
+
+  .notifications-header::after,
+  .notifications-header::before {
+    content: "🕯";
+  }
+
+  .messages-header::after,
+  .messages-header::before {
+    content: "🖂";
+  }
+
+  header {
+    margin-bottom: -0.15em;
+  }
+}

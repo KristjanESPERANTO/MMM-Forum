@@ -1,0 +1,15 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "bumpp",
+    "datetime",
+    "Kristjan",
+    "lastposttime",
+    "nodebb",
+    "notif",
+    "stylelint"
+  ],
+  "ignorePaths": ["node_modules/**", "translations/**"],
+  "dictionaries": ["node"]
+}
