@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "A MagicMirror² module to display information from the MagicMirror² forum.",
   "author": "Kristjan ESPERANTO (https://github.com/KristjanESPERANTO)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KristjanESPERANTO/MMM-Forum.git"
+  },
   "license": "ISC",
   "keywords": [
     "MagicMirror",
