@@ -83,7 +83,6 @@ All notable changes to this project will be documented in the [CHANGELOG.md](./C
 
 ### To-Do
 
-- [ ] Publish the module on GitHub.
 - [ ] Add translations.
 - [ ] Add tests.
 - [ ] Check if there are more interesting API endpoints to use. Like <https://forum.magicmirror.builders/api/config>.
