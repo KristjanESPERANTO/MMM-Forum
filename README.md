@@ -32,7 +32,7 @@ npm ci
 
 ## Configuration
 
-### Minimal example
+### Basic configuration example
 
 To use this module, add it to the modules array in the `config/config.js` file:
 
@@ -77,7 +77,7 @@ Pull requests are of course also very welcome 🙂
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE.md) file for details.
+This project is licensed under the ISC License - see the [LICENSE](./LICENSE.md) file for details.
 
 ## Changelog
 
