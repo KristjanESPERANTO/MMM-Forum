@@ -83,7 +83,7 @@ This project is licensed under the ISC License - see the [LICENSE](./LICENSE.md)
 
 All notable changes to this project will be documented in the [CHANGELOG.md](./CHANGELOG.md) file.
 
-### To-Do
+## To-Do
 
 - [ ] Add translations.
 - [ ] Add tests.
