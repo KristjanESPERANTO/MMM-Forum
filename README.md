@@ -1,6 +1,6 @@
 # MMM-Forum
 
-MMM-Forum is a module for the [MagicMirror²][mm] that displays information from the MagicMirror² forum. Like latest posts, unread posts, etc. The module should also work for other NodeBB forums, but it is not tested.
+MMM-Forum is a module for [MagicMirror²][mm] that displays information from the MagicMirror² forum. Like latest posts, unread posts, etc. The module should also work for other NodeBB forums, but it is not tested.
 
 ## Screenshot
 
