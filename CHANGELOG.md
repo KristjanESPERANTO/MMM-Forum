@@ -5,17 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.0.1] Maintenance Release - 2024-11-26
 
 ### Added
 
+- [chore] Add rules for markdownlint
+
 ### Changed
 
-### Removed
+- [chore] Update devDependencies
+- [chore] Fix heading and license in README.md
+- [chore] Optimize wording in README.md
 
 ## [1.0.0] - 2024-11-13
 
 Initial release.
 
-[unreleased]: https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.0...HEAD
+[1.0.1]: https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/KristjanESPERANTO/MMM-Forum/releases/tag/v1.0.0
