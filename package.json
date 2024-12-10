@@ -1,6 +1,6 @@
 {
   "name": "mmm-forum",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A MagicMirror² module to display information from the MagicMirror² forum.",
   "keywords": [
     "MagicMirror",
