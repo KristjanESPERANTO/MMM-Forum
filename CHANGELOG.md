@@ -5,32 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] Maintenance Release - 2024-12-17
+
+### Added
+
+- _chore_ - Enable linter rule `no-missing-label-refs`
+- _chore_ - Update devDependencies
+
 ## [1.0.2] Maintenance Release - 2024-12-10
 
 ### Added
 
-- [chore] Add Code of Conduct
+- _chore_ - Add Code of Conduct
 
 ### Changed
 
-- [chore] Update devDependencies
-- [chore] Update format `package.json`
+- _chore_ - Update devDependencies
+- _chore_ - Update format `package.json`
 
 ## [1.0.1] Maintenance Release - 2024-11-26
 
 ### Added
 
-- [chore] Add rules for markdownlint
+- _chore_ - Add rules for markdownlint
 
 ### Changed
 
-- [chore] Update devDependencies
-- [chore] Fix heading and license in README.md
-- [chore] Optimize wording in README.md
+- _chore_ - Update devDependencies
+- _chore_ - Fix heading and license in README.md
+- _chore_ - Optimize wording in README.md
 
 ## [1.0.0] - 2024-11-13
 
 Initial release.
 
+[1.0.3]: https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.2...v1.0.3
+[1.0.2]: https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/KristjanESPERANTO/MMM-Forum/releases/tag/v1.0.0
