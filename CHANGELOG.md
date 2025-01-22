@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - _chore_ - Enable husky
+- _chore_ - Update devDependencies
 
 ## [1.0.3] Maintenance Release - 2024-12-17
 
