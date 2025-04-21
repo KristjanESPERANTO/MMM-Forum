@@ -2,9 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.7](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.6...v1.0.7) - Maintenance Release (2025-04-21)
+
+### Changed
+
+- chore: clean up ESLint rules by removing unnecessary settings and improving consistency
+- chore: update devDependencies
+- chore: update ESLint configuration to use new import plugin structure
+- docs: add 'npm install' command to developer commands section
+
 ## [1.0.6](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.5...v1.0.6) - Maintenance Release (2025-03-12)
 
-### Chore
+### Changed
 
 - chore: simplify stylelint-prettier config
 - chore: update devDependencies
@@ -16,46 +25,46 @@ All notable changes to this project will be documented in this file. See [commit
 
 ### Changed
 
-- _chore_ - Update devDependencies
-- _chore_ - Simplify ESLint calls
-- _chore_ - Replace `eslint-plugin-import` with `eslint-plugin-import-x`
+- chore: Update devDependencies
+- chore: Simplify ESLint calls
+- chore: Replace `eslint-plugin-import` with `eslint-plugin-import-x`
 
 ## [1.0.4](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.3...v1.0.4) - Maintenance Release (2025-01-22)
 
 ### Added
 
-- _chore_ - Enable husky
-- _chore_ - Update devDependencies
+- chore: Enable husky
+- chore: Update devDependencies
 
 ## [1.0.3](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.2...v1.0.3) - Maintenance Release (2024-12-17)
 
 ### Changed
 
-- _chore_ - Enable linter rule `no-missing-label-refs`
-- _chore_ - Update devDependencies
+- chore: Enable linter rule `no-missing-label-refs`
+- chore: Update devDependencies
 
 ## [1.0.2](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.1...v1.0.2) - Maintenance Release (2024-12-10)
 
 ### Added
 
-- _chore_ - Add Code of Conduct
+- chore: Add Code of Conduct
 
 ### Changed
 
-- _chore_ - Update devDependencies
-- _chore_ - Update format `package.json`
+- chore: Update devDependencies
+- chore: Update format `package.json`
 
 ## [1.0.1](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.0...v1.0.1) - Maintenance Release (2024-11-26)
 
 ### Added
 
-- _chore_ - Add rules for markdownlint
+- chore: Add rules for markdownlint
 
 ### Changed
 
-- _chore_ - Update devDependencies
-- _chore_ - Fix heading and license in README.md
-- _chore_ - Optimize wording in README.md
+- chore: Update devDependencies
+- chore: Fix heading and license in README.md
+- chore: Optimize wording in README.md
 
 ## [1.0.0](https://github.com/KristjanESPERANTO/MMM-Forum/releases/tag/v1.0.0) (2024-11-13)
 
