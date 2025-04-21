@@ -63,7 +63,6 @@ const config = [
       "no-inline-comments": "off",
       "no-magic-numbers": "off",
       "no-ternary": "off",
-      "no-undef": "warn",
       "one-var": "off",
       "sort-keys": "off",
       "strict": "off"
@@ -83,14 +82,9 @@ const config = [
     },
     "rules": {
       ...eslintPluginStylistic.configs.all.rules,
-      "@stylistic/array-element-newline": "off",
+      "@stylistic/array-element-newline": ["error", "consistent"],
       "@stylistic/indent": ["error", 2],
-      "@stylistic/padded-blocks": ["error", "never"],
-      "func-style": "off",
-      "max-lines-per-function": ["error", 100],
-      "no-magic-numbers": "off",
-      "one-var": "off",
-      "prefer-destructuring": "off"
+      "no-magic-numbers": ["error", {"ignore": [2, 100, 200]}]
     }
   }
 ];
