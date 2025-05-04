@@ -23,9 +23,18 @@
     "test:spelling": "cspell ."
   },
   "lint-staged": {
-    "*.css": "stylelint --fix",
-    "*.js": "eslint --cache --fix",
-    "*.md": "markdownlint --ignore node_modules --fix"
+    "!(*.css|*.md)": [
+      "eslint --fix",
+      "prettier --write --ignore-unknown"
+    ],
+    "*.css": [
+      "stylelint --fix",
+      "prettier --write"
+    ],
+    "*.md": [
+      "markdownlint --ignore node_modules --fix",
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "cheerio": "^1.0.0",
