@@ -1,5 +1,5 @@
-import {defineConfig, globalIgnores} from "eslint/config";
 import css from "@eslint/css";
+import {defineConfig} from "eslint/config";
 import globals from "globals";
 import {flatConfigs as importX} from "eslint-plugin-import-x";
 import js from "@eslint/js";
@@ -8,7 +8,6 @@ import markdown from "@eslint/markdown";
 import stylistic from "@stylistic/eslint-plugin";
 
 export default defineConfig([
-  globalIgnores(["**/*.min.js"]),
   {"files": ["**/*.css"], "languageOptions": {"tolerant": true}, "plugins": {css}, "language": "css/css", "extends": ["css/recommended"], "rules": {"css/use-baseline": ["error", {"available": "newly"}]}},
   {
     "files": ["**/*.js"],
