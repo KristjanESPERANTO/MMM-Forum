@@ -19,7 +19,7 @@
     "lint:fix": "eslint --fix && prettier . --write",
     "prepare": "[ -f node_modules/.bin/husky ] && husky || echo husky is not installed.",
     "release": "npx commit-and-tag-version",
-    "test": "npm run lint && npm run test:spelling",
+    "test": "node --run lint && node --run test:spelling",
     "test:spelling": "cspell ."
   },
   "lint-staged": {
