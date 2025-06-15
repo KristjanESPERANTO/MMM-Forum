@@ -2,7 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
-## [1.0.8](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.7...v1.0.8) - Maintenance Release
+## [1.0.10](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.8...v1.0.10) (2025-06-15)
+
+### Changed
+
+- chore: add `type` field to `package.json`
+- chore: remove unused `globalIgnores` import from ELint config
+- chore: update dependencies
+- chore: update ELint config to use `js/all` rules
+
+## [1.0.8](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.7...v1.0.8) - Maintenance Release (2025-05-17)
 
 ### Changed
 
