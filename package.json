@@ -2,6 +2,7 @@
   "name": "mmm-forum",
   "version": "1.0.8",
   "description": "A MagicMirror² module to display information from the MagicMirror² forum.",
+  "type": "commonjs",
   "keywords": [
     "MagicMirror",
     "forum",
