@@ -2,7 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
-## [1.0.10](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.8...v1.0.10) (2025-06-15)
+## [1.0.11](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.10...v1.0.11) - Maintenance Release (2025-08-22)
+
+### Added
+
+- chore: add automated tests workflow for linting and spell checking
+- chore: add dependabot configuration for GitHub Actions and npm updates
+
+### Changed
+
+- chore: update dependencies
+
+## [1.0.9](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.8...v1.0.9) - Maintenance Release (2025-06-15)
 
 ### Changed
 
