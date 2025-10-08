@@ -3,6 +3,9 @@
   text-align: center;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  max-width: 33vw;
 
   .solved::before {
     content: "✔";
@@ -13,21 +16,22 @@
   .title,
   .teaser {
     margin-bottom: -0.5em;
+    width: fit-content;
+    max-width: 100%;
+    overflow-wrap: break-word;
   }
 
   .teaser {
     font-style: italic;
   }
 
-  .info,
-  .user,
-  .category,
-  .time {
-    display: inline-block;
+  .info {
+    display: flex;
+    align-items: center;
+    gap: 0.5ch;
   }
 
   .info > div {
-    margin-right: 0.5ch;
     font-size: smaller;
   }
 
@@ -63,8 +67,7 @@
   .header {
     font-size: large;
     font-weight: bold;
-    border-bottom-width: 1px;
-    border-bottom-style: dotted;
+    border-bottom: 1px dotted;
     margin-top: 0.5em;
 
     &::after,
