@@ -10,8 +10,6 @@ The module should also work for other NodeBB forums, but hasn't been tested yet.
 
 ## Installation
 
-### Install
-
 Just clone the module into your modules directory and install the dependencies:
 
 ```bash
@@ -20,7 +18,7 @@ git clone https://github.com/KristjanESPERANTO/MMM-Forum
 npm ci
 ```
 
-### Update
+## Update
 
 Just enter the module's directory, pull the update and install the dependencies:
 
