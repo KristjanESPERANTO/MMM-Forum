@@ -2,7 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
-## [1.0.11](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.10...v1.0.11) - Maintenance Release (2025-08-22)
+## [1.0.11](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.10...v1.0.11) - Maintenance Release (2025-10-08)
+
+### Changed
+
+- chore: update dependencies
+- chore: update Node.js setup action to version 5
+- docs: change section headers
+
+### Fixed
+
+- style: improve layout and formatting (necessary after MM switched to flexbox)
+
+## [1.0.10](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.9...v1.0.10) - Maintenance Release (2025-08-22)
 
 ### Added
 
