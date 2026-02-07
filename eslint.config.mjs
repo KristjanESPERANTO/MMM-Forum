@@ -18,8 +18,8 @@ export default defineConfig([
         ...globals.node
       }
     },
-    "plugins": {js, stylistic},
-    "extends": [importX.recommended, "js/all", "stylistic/all"],
+    "plugins": {js},
+    "extends": [importX.recommended, "js/all", stylistic.configs.all],
     "rules": {
       "@stylistic/array-element-newline": ["error", "consistent"],
       "@stylistic/dot-location": ["error", "property"],
@@ -51,8 +51,8 @@ export default defineConfig([
       },
       "sourceType": "module"
     },
-    "plugins": {js, stylistic},
-    "extends": [importX.recommended, "js/all", "stylistic/all"],
+    "plugins": {js},
+    "extends": [importX.recommended, "js/all", stylistic.configs.all],
     "rules": {
       "@stylistic/array-element-newline": ["error", "consistent"],
       "@stylistic/indent": ["error", 2],
