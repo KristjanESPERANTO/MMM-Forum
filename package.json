@@ -16,6 +16,7 @@
   "author": "Kristjan ESPERANTO (https://github.com/KristjanESPERANTO)",
   "main": "MMM-Forum.js",
   "scripts": {
+    "demo": "cd ../../ && MM_CONFIG_FILE=modules/MMM-Forum/demo.config.js node --run start:dev",
     "lint": "eslint && prettier . --check",
     "lint:fix": "eslint --fix && prettier . --write",
     "prepare": "[ -f node_modules/.bin/husky ] && husky || echo husky is not installed.",
