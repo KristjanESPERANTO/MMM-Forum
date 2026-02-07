@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.0.12](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.11...v1.0.12) (2026-02-07)
+
+
+### Fixed
+
+* add "flexbox" to cspell configuration words list ([62b34be](https://github.com/KristjanESPERANTO/MMM-Forum/commit/62b34be2469e7419133e267c289e00368d08b17b))
+
+
+### Chores
+
+* add demo config ([c7e993a](https://github.com/KristjanESPERANTO/MMM-Forum/commit/c7e993aa8b60e1509c75f9473530df71f41fe820))
+* change runner from ubuntu-latest to ubuntu-slim in automated tests workflow ([7283a3c](https://github.com/KristjanESPERANTO/MMM-Forum/commit/7283a3ca1be29d169f706d479ebd2410bfc6dc5d))
+* replace husky with simple-git-hooks for pre-commit linting ([724f890](https://github.com/KristjanESPERANTO/MMM-Forum/commit/724f890ee7b52a9eaa253baeb002afb2d389efeb))
+* update dependencies ([36fa433](https://github.com/KristjanESPERANTO/MMM-Forum/commit/36fa43397f56e61acd6d6e9218ad2a323d3deb70))
+* update eslint config ([d1bafea](https://github.com/KristjanESPERANTO/MMM-Forum/commit/d1bafead77df010ba4e957d5e1ad76411d5b6fee))
+* update GitHub Actions to use checkout and setup-node version 6 ([4c5e33a](https://github.com/KristjanESPERANTO/MMM-Forum/commit/4c5e33a80cf7c2326fca29a799d1ce963f4ef937))
+* update release setup ([7d63add](https://github.com/KristjanESPERANTO/MMM-Forum/commit/7d63add7145b062829517d2b02e1453aaa2199bc))
+
 ## [1.0.11](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.10...v1.0.11) - Maintenance Release (2025-10-08)
 
 ### Changed
