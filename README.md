@@ -1,6 +1,6 @@
 # MMM-Forum
 
-MMM-Forum is a module for [MagicMirror²][mm] that displays information from the MagicMirror² forum, such as unread topics, notifications and messages.
+MMM-Forum is a module for [MagicMirror²](https://github.com/MagicMirrorOrg/MagicMirror) that displays information from the MagicMirror² forum, such as unread topics, notifications and messages.
 
 The module should also work for other NodeBB forums, but hasn't been tested yet. Feedback would be appreciated.
 
@@ -92,8 +92,5 @@ All notable changes to this project will be documented in the [CHANGELOG.md](./C
 - [ ] Add tests.
 - [ ] Check if there are more interesting API endpoints to use. Like <https://forum.magicmirror.builders/api/config>.
 - [ ] Show information about the user.
-- [ ] Add GitHub Actions for CI/CD.
 - [ ] Add notification sound if there are new notifications.
 - [ ] Replace To-Do with GitHub issues.
-
-[mm]: https://github.com/MagicMirrorOrg/MagicMirror
