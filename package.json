@@ -34,8 +34,7 @@
     ]
   },
   "dependencies": {
-    "cheerio": "^1.2.0",
-    "dayjs": "^1.11.20"
+    "cheerio": "^1.2.0"
   },
   "devDependencies": {
     "@eslint/css": "^1.0.0",

@@ -1,4 +1,4 @@
-/* global config dayjs Log Module */
+/* global config Log Module */
 
 Module.register("MMM-Forum", {
 
@@ -17,27 +17,77 @@ Module.register("MMM-Forum", {
     return ["MMM-Forum.css"];
   },
 
-  getScripts () {
-    return [
-      this.file("node_modules/dayjs/dayjs.min.js"),
-      this.file("node_modules/dayjs/plugin/localizedFormat.js"),
-      this.file("node_modules/dayjs/plugin/relativeTime.js"),
-      this.file(`node_modules/dayjs/locale/${config.language}.js`)
-    ];
-  },
-
   async start () {
     if (this.config.apiRequestInterval < 3 * 60 * 1000) {
       Log.warn("[MMM-Forum] API request interval is too low. Setting it to 3 minutes.");
       this.config.apiRequestInterval = 3 * 60 * 1000;
     }
 
-    dayjs.locale(config.language);
-    dayjs.extend(window.dayjs_plugin_relativeTime);
     await this.sendSocketNotification("MMM-FORUM-LOGIN", this.config);
 
     // Update DOM every 60 seconds to update the relative time indicators
     setInterval(async () => await this.updateDom(), 60 * 1000);
+  },
+
+  getRelativeTimeFormatter () {
+    if (!this.relativeTimeFormatter) {
+      try {
+        this.relativeTimeFormatter = new Intl.RelativeTimeFormat(config.language || "en", {
+          numeric: "auto"
+        });
+      } catch {
+        this.relativeTimeFormatter = new Intl.RelativeTimeFormat("en", {
+          numeric: "auto"
+        });
+      }
+    }
+
+    return this.relativeTimeFormatter;
+  },
+
+  getRelativeTimeText (dateInput) {
+    const date = dateInput instanceof Date
+      ? dateInput
+      : new Date(dateInput);
+    if (Number.isNaN(date.getTime())) {
+      return "";
+    }
+
+    const differenceInSeconds = Math.round((date.getTime() - Date.now()) / 1000);
+    const absSeconds = Math.abs(differenceInSeconds);
+    const formatter = this.getRelativeTimeFormatter();
+
+    if (absSeconds < 60) {
+      return formatter.format(differenceInSeconds, "second");
+    }
+
+    const differenceInMinutes = Math.round(differenceInSeconds / 60);
+    if (Math.abs(differenceInMinutes) < 60) {
+      return formatter.format(differenceInMinutes, "minute");
+    }
+
+    const differenceInHours = Math.round(differenceInMinutes / 60);
+    if (Math.abs(differenceInHours) < 24) {
+      return formatter.format(differenceInHours, "hour");
+    }
+
+    const differenceInDays = Math.round(differenceInHours / 24);
+    if (Math.abs(differenceInDays) < 7) {
+      return formatter.format(differenceInDays, "day");
+    }
+
+    const differenceInWeeks = Math.round(differenceInDays / 7);
+    if (Math.abs(differenceInWeeks) < 4) {
+      return formatter.format(differenceInWeeks, "week");
+    }
+
+    const differenceInMonths = Math.round(differenceInDays / 30);
+    if (Math.abs(differenceInMonths) < 12) {
+      return formatter.format(differenceInMonths, "month");
+    }
+
+    const differenceInYears = Math.round(differenceInDays / 365);
+    return formatter.format(differenceInYears, "year");
   },
 
   socketNotificationReceived (notification, payload) {
@@ -70,7 +120,7 @@ Module.register("MMM-Forum", {
           topicCategory.classList.add("category");
           const topicTime = document.createElement("div");
           const time = new Date(topic.lastposttimeISO);
-          const timeAgo = dayjs(time).fromNow();
+          const timeAgo = this.getRelativeTimeText(time);
           topicTime.innerHTML = timeAgo;
           topicTime.classList.add("time");
 
@@ -121,7 +171,7 @@ Module.register("MMM-Forum", {
           topicUser.classList.add("user");
           const topicTime = document.createElement("div");
           const time = new Date(unreadNotification.datetimeISO);
-          const timeAgo = dayjs(time).fromNow();
+          const timeAgo = this.getRelativeTimeText(time);
           topicTime.innerHTML = timeAgo;
           topicTime.classList.add("time");
 
@@ -181,7 +231,7 @@ Module.register("MMM-Forum", {
           messageTeaser.classList.add("teaser");
           const messageTime = document.createElement("div");
           const time = new Date(room.lastposttimeISO);
-          const timeAgo = dayjs(time).fromNow();
+          const timeAgo = this.getRelativeTimeText(time);
           messageTime.textContent = timeAgo;
           messageTime.classList.add("message-time");
 
@@ -212,7 +262,7 @@ Module.register("MMM-Forum", {
     if (this.config.displayLastApiCall && this.lastApiCall) {
       const updateInfo = document.createElement("div");
       updateInfo.classList.add("update");
-      updateInfo.textContent = `Last API request: ${dayjs(this.lastApiCall).fromNow()}`;
+      updateInfo.textContent = `Last API request: ${this.getRelativeTimeText(this.lastApiCall)}`;
       wrapper.appendChild(updateInfo);
     }
     if (this.unreadTopicsContainer) {
