@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.0](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.12...v1.1.0) (2026-03-18)
+
+
+### Added
+
+* add i18n and polish UI ([c7c1885](https://github.com/KristjanESPERANTO/MMM-Forum/commit/c7c1885f8a91df052b70aeb972f2644528edb8e5))
+
+
+### Chores
+
+* simplify prepare script ([305c99b](https://github.com/KristjanESPERANTO/MMM-Forum/commit/305c99b90f6fa0c28c7e89f1ee3c0fe8e6014408))
+* update dependencies ([fcbf677](https://github.com/KristjanESPERANTO/MMM-Forum/commit/fcbf6777cc13ebe35c06e5616bbf6fc96f1726a1))
+* update README ([ae63664](https://github.com/KristjanESPERANTO/MMM-Forum/commit/ae63664bb7df57783874e7559d0dde774ed9f7c4))
+
+
+### Code Refactoring
+
+* replace dayjs with vanilla JavaScript relative time formatting ([bbbf272](https://github.com/KristjanESPERANTO/MMM-Forum/commit/bbbf27299310eb1f66711555cb951049f10c20cb))
+
 ## [1.0.12](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.11...v1.0.12) (2026-02-07)
 
 
