@@ -9,7 +9,7 @@
     "lastposttime",
     "nodebb",
     "notif",
-    "stylelint"
+    "xsmall"
   ],
   "ignorePaths": ["node_modules/**", "translations/**"],
   "dictionaries": ["node"]

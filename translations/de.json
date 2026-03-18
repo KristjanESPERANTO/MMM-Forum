@@ -1,0 +1,8 @@
+{
+  "UNREAD_TOPICS": "Ungelesene Themen",
+  "UNREAD_NOTIFICATIONS": "Ungelesene Benachrichtigungen",
+  "UNREAD_MESSAGES": "Ungelesene Nachrichten",
+  "SHOWING_OF": "Zeige {shown} von {total}",
+  "CHAT_WITH": "Chat mit {user}",
+  "ERROR_FETCHING_FORUM_DATA": "Fehler beim Abrufen der Forendaten!"
+}

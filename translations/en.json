@@ -1,0 +1,8 @@
+{
+  "UNREAD_TOPICS": "Unread Topics",
+  "UNREAD_NOTIFICATIONS": "Unread Notifications",
+  "UNREAD_MESSAGES": "Unread Messages",
+  "SHOWING_OF": "Showing {shown} of {total}",
+  "CHAT_WITH": "Chat with {user}",
+  "ERROR_FETCHING_FORUM_DATA": "Error fetching data from the forum!"
+}

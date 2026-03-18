@@ -17,6 +17,13 @@ Module.register("MMM-Forum", {
     return ["MMM-Forum.css"];
   },
 
+  getTranslations () {
+    return {
+      de: "translations/de.json",
+      en: "translations/en.json"
+    };
+  },
+
   async start () {
     if (this.config.apiRequestInterval < 3 * 60 * 1000) {
       Log.warn("[MMM-Forum] API request interval is too low. Setting it to 3 minutes.");
@@ -90,56 +97,162 @@ Module.register("MMM-Forum", {
     return formatter.format(differenceInYears, "year");
   },
 
+  parseTimestampCandidate (candidate) {
+    if (candidate === null || candidate === "") {
+      return null;
+    }
+
+    if (candidate instanceof Date) {
+      if (Number.isNaN(candidate.getTime())) {
+        return null;
+      }
+
+      return candidate;
+    }
+
+    const parseNumericTimestamp = (value) => {
+      if (!Number.isFinite(value)) {
+        return null;
+      }
+
+      // Heuristic: treat sub-1e11 values as seconds and convert to milliseconds.
+      let timestampInMs = value;
+      if (Math.abs(value) < 1e11) {
+        timestampInMs = value * 1000;
+      }
+
+      const parsedDate = new Date(timestampInMs);
+      if (Number.isNaN(parsedDate.getTime())) {
+        return null;
+      }
+
+      return parsedDate;
+    };
+
+    if (typeof candidate === "number") {
+      return parseNumericTimestamp(candidate);
+    }
+
+    if (typeof candidate === "string") {
+      const trimmedCandidate = candidate.trim();
+      if (trimmedCandidate === "") {
+        return null;
+      }
+
+      const numericValue = Number(trimmedCandidate);
+      if (!Number.isNaN(numericValue)) {
+        const numericDate = parseNumericTimestamp(numericValue);
+        if (numericDate) {
+          return numericDate;
+        }
+      }
+
+      const parsedDate = new Date(trimmedCandidate);
+      if (Number.isNaN(parsedDate.getTime())) {
+        return null;
+      }
+
+      return parsedDate;
+    }
+
+    return null;
+  },
+
+  getRelativeTimeFromCandidates (candidates) {
+    for (const candidate of candidates) {
+      const parsedDate = this.parseTimestampCandidate(candidate);
+      if (parsedDate) {
+        const relativeTimeText = this.getRelativeTimeText(parsedDate);
+        if (relativeTimeText) {
+          return relativeTimeText;
+        }
+      }
+    }
+
+    return "";
+  },
+
+  createSectionHeader (iconClass, label, count) {
+    const sectionHeader = document.createElement("header");
+    const icon = document.createElement("i");
+    icon.classList.add("fa", iconClass);
+    sectionHeader.appendChild(icon);
+    sectionHeader.appendChild(document.createTextNode(` ${label} `));
+    const badge = document.createElement("span");
+    badge.classList.add("badge");
+    badge.textContent = count;
+    sectionHeader.appendChild(badge);
+    return sectionHeader;
+  },
+
+  createMetaSpan (iconClass, text) {
+    const span = document.createElement("span");
+    const icon = document.createElement("i");
+    icon.classList.add("fa", iconClass);
+    span.appendChild(icon);
+    span.appendChild(document.createTextNode(` ${text}`));
+    return span;
+  },
+
+  getPlainText (htmlContent) {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = htmlContent ?? "";
+    return (tempDiv.textContent || "").trim();
+  },
+
+  getTranslatedChatTitle (chatTitle) {
+    const plainTitle = this.getPlainText(chatTitle);
+    const chatWithPrefix = "Chat with ";
+
+    if (plainTitle.startsWith(chatWithPrefix)) {
+      const user = plainTitle.substring(chatWithPrefix.length).trim();
+      if (user) {
+        return this.translate("CHAT_WITH", {user});
+      }
+    }
+
+    return plainTitle;
+  },
+
   socketNotificationReceived (notification, payload) {
     switch (notification) {
       case "MMM-FORUM_UNREAD_TOPICS": {
         this.lastApiCall = Date.now();
         this.unreadTopicsContainer = document.createElement("div");
-        const unreadTopicsHeader = document.createElement("div");
-        unreadTopicsHeader.classList.add("header", "topics-header");
-        unreadTopicsHeader.innerHTML = `Unread topics: ${payload.length}`;
-        if (this.config.maxUnreadTopics < payload.length) {
-          unreadTopicsHeader.innerHTML = `Last ${this.config.maxUnreadTopics} unread topics. Total: ${payload.length}`;
-        }
-        this.unreadTopicsContainer.appendChild(unreadTopicsHeader);
+        this.unreadTopicsContainer.classList.add("section");
+        this.unreadTopicsContainer.appendChild(this.createSectionHeader("fa-comments", this.translate("UNREAD_TOPICS"), payload.length));
 
-        const unreadTopicsData = document.createElement("div");
+        if (this.config.maxUnreadTopics < payload.length) {
+          const note = document.createElement("div");
+          note.classList.add("xsmall", "dimmed", "truncation-note");
+          note.textContent = this.translate("SHOWING_OF", {
+            shown: this.config.maxUnreadTopics,
+            total: payload.length
+          });
+          this.unreadTopicsContainer.appendChild(note);
+        }
 
         payload.slice(0, this.config.maxUnreadTopics).forEach((topic) => {
-          const topicContainer = document.createElement("div");
-          const topicTitle = document.createElement("div");
-          topicTitle.innerHTML = topic.title;
-          topicTitle.classList.add("title");
-          const topicInfo = document.createElement("div");
-          topicInfo.classList.add("info");
-          const topicUser = document.createElement("div");
-          topicUser.innerHTML = topic.user.username;
-          topicUser.classList.add("user");
-          const topicCategory = document.createElement("div");
-          topicCategory.innerHTML = topic.category.name;
-          topicCategory.classList.add("category");
-          const topicTime = document.createElement("div");
-          const time = new Date(topic.lastposttimeISO);
-          const timeAgo = this.getRelativeTimeText(time);
-          topicTime.innerHTML = timeAgo;
-          topicTime.classList.add("time");
+          const entry = document.createElement("div");
+          entry.classList.add("entry");
 
+          const title = document.createElement("div");
+          title.classList.add("entry-title", "small", "light");
+          title.textContent = this.getPlainText(topic.title);
           if (topic.isSolved) {
-            topicTitle.classList.add("solved", "fa", "fa-check");
-            topicTitle.innerHTML = `SOLVED - ${topicTitle.innerHTML}`;
-          } else {
-            topicTitle.classList.add("unsolved");
+            title.classList.add("solved");
           }
+          entry.appendChild(title);
 
-          topicContainer.appendChild(topicTitle);
-          topicInfo.appendChild(topicUser);
-          topicInfo.appendChild(topicCategory);
-          topicInfo.appendChild(topicTime);
-          topicContainer.appendChild(topicInfo);
+          const meta = document.createElement("div");
+          meta.classList.add("entry-meta", "xsmall", "dimmed");
+          meta.appendChild(this.createMetaSpan("fa-user", topic.user.username));
+          meta.appendChild(this.createMetaSpan("fa-folder-o", topic.category.name));
+          meta.appendChild(this.createMetaSpan("fa-clock-o", this.getRelativeTimeText(new Date(topic.lastposttimeISO))));
+          entry.appendChild(meta);
 
-          unreadTopicsData.appendChild(topicContainer);
+          this.unreadTopicsContainer.appendChild(entry);
         });
-        this.unreadTopicsContainer.appendChild(unreadTopicsData);
 
         this.updateDom();
         break;
@@ -149,47 +262,39 @@ Module.register("MMM-Forum", {
 
         this.lastApiCall = Date.now();
         this.unreadNotificationsContainer = document.createElement("div");
-        const unreadNotificationsHeader = document.createElement("div");
-        unreadNotificationsHeader.classList.add("header", "notifications-header");
-        unreadNotificationsHeader.innerHTML = `Unread notifications: ${unreadNotifications.length}`;
-        if (this.config.maxUnreadNotifications < unreadNotifications.length) {
-          unreadNotificationsHeader.innerHTML = `Last ${this.config.maxUnreadNotifications} unread notifications. Total: ${unreadNotifications.length}`;
-        }
-        this.unreadNotificationsContainer.appendChild(unreadNotificationsHeader);
+        this.unreadNotificationsContainer.classList.add("section");
+        this.unreadNotificationsContainer.appendChild(this.createSectionHeader("fa-bell", this.translate("UNREAD_NOTIFICATIONS"), unreadNotifications.length));
 
-        const unreadNotificationsData = document.createElement("div");
+        if (this.config.maxUnreadNotifications < unreadNotifications.length) {
+          const note = document.createElement("div");
+          note.classList.add("xsmall", "dimmed", "truncation-note");
+          note.textContent = this.translate("SHOWING_OF", {
+            shown: this.config.maxUnreadNotifications,
+            total: unreadNotifications.length
+          });
+          this.unreadNotificationsContainer.appendChild(note);
+        }
 
         unreadNotifications.slice(0, this.config.maxUnreadNotifications).forEach((unreadNotification) => {
-          const topicNotification = document.createElement("div");
-          const topicTitle = document.createElement("div");
-          topicTitle.innerHTML = unreadNotification.topicTitle;
-          topicTitle.classList.add("topic-title");
-          const topicInfo = document.createElement("div");
-          topicInfo.classList.add("info");
-          const topicUser = document.createElement("div");
-          topicUser.innerHTML = unreadNotification.user.username;
-          topicUser.classList.add("user");
-          const topicTime = document.createElement("div");
-          const time = new Date(unreadNotification.datetimeISO);
-          const timeAgo = this.getRelativeTimeText(time);
-          topicTime.innerHTML = timeAgo;
-          topicTime.classList.add("time");
+          const entry = document.createElement("div");
+          entry.classList.add("entry");
 
+          const title = document.createElement("div");
+          title.classList.add("entry-title", "small", "light");
+          title.textContent = this.getPlainText(unreadNotification.topicTitle);
           if (unreadNotification.isSolved) {
-            topicTitle.classList.add("solved", "fa", "fa-check");
-            topicTitle.innerHTML = `SOLVED - ${topicTitle.innerHTML}`;
-          } else {
-            topicTitle.classList.add("unsolved");
+            title.classList.add("solved");
           }
+          entry.appendChild(title);
 
-          topicNotification.appendChild(topicTitle);
-          topicInfo.appendChild(topicUser);
-          topicInfo.appendChild(topicTime);
-          topicNotification.appendChild(topicInfo);
+          const meta = document.createElement("div");
+          meta.classList.add("entry-meta", "xsmall", "dimmed");
+          meta.appendChild(this.createMetaSpan("fa-user", unreadNotification.user.username));
+          meta.appendChild(this.createMetaSpan("fa-clock-o", this.getRelativeTimeText(new Date(unreadNotification.datetimeISO))));
+          entry.appendChild(meta);
 
-          unreadNotificationsData.appendChild(topicNotification);
+          this.unreadNotificationsContainer.appendChild(entry);
         });
-        this.unreadNotificationsContainer.appendChild(unreadNotificationsData);
 
         this.updateDom();
         break;
@@ -199,58 +304,69 @@ Module.register("MMM-Forum", {
 
         this.lastApiCall = Date.now();
         this.unreadMessagesContainer = document.createElement("div");
-        const unreadMessagesHeader = document.createElement("div");
-        unreadMessagesHeader.classList.add("header", "messages-header");
-        unreadMessagesHeader.innerHTML = `Unread messages: ${payload.length}`;
-        if (this.config.maxUnreadMessages < unreadMessages.length) {
-          unreadMessagesHeader.innerHTML = `Last ${this.config.maxUnreadMessages} unread messages. Total: ${unreadMessages.length}`;
-        }
-        this.unreadMessagesContainer.appendChild(unreadMessagesHeader);
+        this.unreadMessagesContainer.classList.add("section");
+        this.unreadMessagesContainer.appendChild(this.createSectionHeader("fa-envelope", this.translate("UNREAD_MESSAGES"), payload.length));
 
-        const unreadMessagesData = document.createElement("div");
+        if (this.config.maxUnreadMessages < unreadMessages.length) {
+          const note = document.createElement("div");
+          note.classList.add("xsmall", "dimmed", "truncation-note");
+          note.textContent = this.translate("SHOWING_OF", {
+            shown: this.config.maxUnreadMessages,
+            total: unreadMessages.length
+          });
+          this.unreadMessagesContainer.appendChild(note);
+        }
 
         unreadMessages.slice(0, this.config.maxUnreadMessages).forEach((room) => {
-          const messageContainer = document.createElement("div");
-          const tempHtml = room.chatWithMessage;
-          const tempDiv = document.createElement("div");
-          tempDiv.innerHTML = tempHtml;
-          const messageTitle = document.createElement("div");
-          messageTitle.textContent = tempDiv.textContent;
-          messageTitle.classList.add("title");
-          const messageInfo = document.createElement("div");
-          messageInfo.classList.add("info");
-          const messageTeaser = document.createElement("div");
+          const entry = document.createElement("div");
+          entry.classList.add("entry");
+
+          const title = document.createElement("div");
+          title.classList.add("entry-title", "small", "light");
+          title.textContent = this.getTranslatedChatTitle(room.chatWithMessage);
+          entry.appendChild(title);
+
           if (room.teaser && room.teaser.content) {
-            messageTeaser.textContent = room.teaser.content.length > 50
-              ? `${room.teaser.content.substring(0, 50)}...`
-              : room.teaser.content;
-          } else {
-            messageTeaser.textContent = "No content";
+            const teaser = document.createElement("div");
+            teaser.classList.add("teaser", "xsmall", "dimmed");
+            const teaserText = this.getPlainText(room.teaser.content);
+            teaser.textContent = teaserText.length > 50
+              ? `${teaserText.substring(0, 50)}…`
+              : teaserText;
+            entry.appendChild(teaser);
           }
 
-          messageTeaser.classList.add("teaser");
-          const messageTime = document.createElement("div");
-          const time = new Date(room.lastposttimeISO);
-          const timeAgo = this.getRelativeTimeText(time);
-          messageTime.textContent = timeAgo;
-          messageTime.classList.add("message-time");
+          const meta = document.createElement("div");
+          meta.classList.add("entry-meta", "xsmall", "dimmed");
+          const messageTimeText = this.getRelativeTimeFromCandidates([
+            room.lastposttimeISO,
+            room.lastposttime,
+            room.timestampISO,
+            room.timestamp,
+            room.datetimeISO,
+            room.datetime,
+            room.lastMessageTimestampISO,
+            room.lastMessageTimestamp,
+            room.teaser?.timestampISO,
+            room.teaser?.timestamp,
+            room.teaser?.datetimeISO,
+            room.teaser?.datetime
+          ]);
+          if (messageTimeText) {
+            meta.appendChild(this.createMetaSpan("fa-clock-o", messageTimeText));
+          }
+          entry.appendChild(meta);
 
-          messageContainer.appendChild(messageTitle);
-          messageContainer.appendChild(messageTeaser);
-          messageInfo.appendChild(messageTime);
-          messageContainer.appendChild(messageInfo);
-
-          unreadMessagesData.appendChild(messageContainer);
+          this.unreadMessagesContainer.appendChild(entry);
         });
-        this.unreadMessagesContainer.appendChild(unreadMessagesData);
 
         this.updateDom();
         break;
       }
       case "MMM-FORUM_ERROR": {
         this.errorContainer = document.createElement("div");
-        this.errorContainer.classList.add("error");
-        this.errorContainer.innerHTML = "Error fetching data from the forum!";
+        this.errorContainer.classList.add("small", "dimmed");
+        this.errorContainer.textContent = this.translate("ERROR_FETCHING_FORUM_DATA");
         this.updateDom();
         break;
       }
@@ -260,10 +376,13 @@ Module.register("MMM-Forum", {
   getDom () {
     const wrapper = document.createElement("div");
     if (this.config.displayLastApiCall && this.lastApiCall) {
-      const updateInfo = document.createElement("div");
-      updateInfo.classList.add("update");
-      updateInfo.textContent = `Last API request: ${this.getRelativeTimeText(this.lastApiCall)}`;
-      wrapper.appendChild(updateInfo);
+      const statusLine = document.createElement("div");
+      statusLine.classList.add("status-line", "xsmall", "dimmed");
+      const refreshIcon = document.createElement("i");
+      refreshIcon.classList.add("fa", "fa-refresh");
+      statusLine.appendChild(refreshIcon);
+      statusLine.appendChild(document.createTextNode(` ${this.getRelativeTimeText(this.lastApiCall)}`));
+      wrapper.appendChild(statusLine);
     }
     if (this.unreadTopicsContainer) {
       wrapper.appendChild(this.unreadTopicsContainer);
