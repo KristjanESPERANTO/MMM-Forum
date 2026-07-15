@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.1](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.1.0...v1.1.1) (2026-07-15)
+
+
+### Fixed
+
+* **messages:** parse NodeBB chat title tokens ([7cf69dc](https://github.com/KristjanESPERANTO/MMM-Forum/commit/7cf69dc4333f484366cf51b74bf0679573905876))
+
+
+### Chores
+
+* update actions/checkout to v7 ([3b444e3](https://github.com/KristjanESPERANTO/MMM-Forum/commit/3b444e3d55918ccb2463b268be78d65ad469e0bc))
+* update devDependencies ([720135e](https://github.com/KristjanESPERANTO/MMM-Forum/commit/720135ef70a406445ae646354c7923cf5c7dd917))
+
 ## [1.1.0](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.0.12...v1.1.0) (2026-03-18)
 
 
