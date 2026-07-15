@@ -211,6 +211,18 @@ Module.register("MMM-Forum", {
       }
     }
 
+    /*
+     * NodeBB can return tokenized translation placeholders for chat titles.
+     * Example: [[modules:chat.chat-with-usernames-1, /uid/123, username]]
+     */
+    const tokenMatch = plainTitle.match(/^\[\[modules:chat\.chat-with-usernames-\d+,\s*\/uid\/\d+,\s*(?<user>.+)\]\]$/u);
+    if (tokenMatch) {
+      const user = tokenMatch.groups?.user?.trim();
+      if (user) {
+        return this.translate("CHAT_WITH", {user});
+      }
+    }
+
     return plainTitle;
   },
 
