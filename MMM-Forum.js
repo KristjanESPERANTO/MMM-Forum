@@ -313,12 +313,12 @@ Module.register('MMM-Forum', {
         break
       }
       case 'MMM-FORUM_UNREAD_MESSAGES': {
-        const unreadMessages = payload.filter(notif => !notif.read)
+        const unreadMessages = payload.filter(room => room.unread)
 
         this.lastApiCall = Date.now()
         this.unreadMessagesContainer = document.createElement('div')
         this.unreadMessagesContainer.classList.add('section')
-        this.unreadMessagesContainer.appendChild(this.createSectionHeader('fa-envelope', this.translate('UNREAD_MESSAGES'), payload.length))
+        this.unreadMessagesContainer.appendChild(this.createSectionHeader('fa-envelope', this.translate('UNREAD_MESSAGES'), unreadMessages.length))
 
         if (this.config.maxUnreadMessages < unreadMessages.length) {
           const note = document.createElement('div')
