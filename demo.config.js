@@ -1,25 +1,25 @@
 const config = {
-  address: "0.0.0.0",
+  address: '0.0.0.0',
   ipWhitelist: [],
-  logLevel: ["INFO", "LOG", "WARN", "ERROR", "DEBUG"],
+  logLevel: ['INFO', 'LOG', 'WARN', 'ERROR', 'DEBUG'],
   modules: [
     {
-      module: "clock",
-      position: "middle_center"
+      module: 'clock',
+      position: 'middle_center',
     },
     {
-      module: "MMM-Forum",
-      position: "top_right",
-      header: "MagicMirror²-Forum",
+      module: 'MMM-Forum',
+      position: 'top_right',
+      header: 'MagicMirror²-Forum',
       config: {
-        username: "",
-        password: ""
-      }
-    }
-  ]
-};
+        username: '',
+        password: '',
+      },
+    },
+  ],
+}
 
 /** ************* DO NOT EDIT THE LINE BELOW ***************/
-if (typeof module !== "undefined") {
-  module.exports = config;
+if (typeof module !== 'undefined') {
+  module.exports = config
 }
