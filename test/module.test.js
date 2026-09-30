@@ -22,7 +22,7 @@ function loadFrontendModule() {
   return frontendModule
 }
 
-function loadNodeHelper(fetchImplementation) {
+function loadNodeHelper(fetchImplementation, timers = {}) {
   const notifications = []
   const helperContext = {
     name: 'MMM-Forum',
@@ -35,6 +35,8 @@ function loadNodeHelper(fetchImplementation) {
   loadModule('node_helper.js', {
     fetch: fetchImplementation,
     module,
+    setInterval: timers.setInterval,
+    clearInterval: timers.clearInterval,
     require(moduleName) {
       if (moduleName === 'cheerio') {
         return { load: () => () => ({ val: () => '' }) }
@@ -128,4 +130,30 @@ test('getUnreadMessages emits an error when fetch fails', async () => {
   await helper.getUnreadMessages.call(helperContext)
 
   assert.deepEqual(notifications, [['MMM-FORUM_ERROR']])
+})
+
+test('loginAndFetchData replaces the previous polling interval', async () => {
+  const started = []
+  const cleared = []
+  const { helper, helperContext } = loadNodeHelper(async () => ({
+    text: async () => '',
+    headers: { get: () => 'session=example' },
+  }), {
+    setInterval(callback, delay) {
+      const handle = { callback, delay }
+      started.push(handle)
+      return handle
+    },
+    clearInterval(handle) {
+      cleared.push(handle)
+    },
+  })
+
+  const context = Object.assign(Object.create(helper), helperContext)
+
+  await helper.loginAndFetchData.call(context)
+  await helper.loginAndFetchData.call(context)
+
+  assert.equal(started.length, 2)
+  assert.equal(cleared.at(-1), started[0])
 })

@@ -47,7 +47,8 @@ module.exports = NodeHelper.create({
       await this.fetchData()
 
       // Set interval for subsequent fetches
-      setInterval(() => this.fetchData(), this.config.apiRequestInterval)
+      clearInterval(this.fetchInterval)
+      this.fetchInterval = setInterval(() => this.fetchData(), this.config.apiRequestInterval)
     }
     else {
       Log.error(`[${this.name}] Error while getting session cookie.`)
