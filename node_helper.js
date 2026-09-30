@@ -13,26 +13,30 @@ module.exports = NodeHelper.create({
     }
   },
 
+  async login() {
+    const loginPageResponse = await fetch(`${this.config.baseUrl}login`)
+    const loginPageHtml = await loginPageResponse.text()
+    const cheerioInstance = cheerio.load(loginPageHtml)
+    const csrfToken = cheerioInstance('input[name="_csrf"]').val()
+    const loginResponse = await fetch(`${this.config.baseUrl}login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': loginPageResponse.headers.get('set-cookie'),
+      },
+      body: JSON.stringify({
+        username: this.config.username,
+        password: this.config.password,
+        _csrf: csrfToken,
+      }),
+    })
+    this.loginSetCookieHeader = loginResponse.headers.get('set-cookie')
+  },
+
   async loginAndFetchData() {
     Log.debug(`[${this.name}] Trying to log in and retrieve session cookie.`)
     try {
-      const loginPageResponse = await fetch(`${this.config.baseUrl}login`)
-      const loginPageHtml = await loginPageResponse.text()
-      const cheerioInstance = cheerio.load(loginPageHtml)
-      const csrfToken = cheerioInstance('input[name="_csrf"]').val()
-      const loginResponse = await fetch(`${this.config.baseUrl}login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cookie': loginPageResponse.headers.get('set-cookie'),
-        },
-        body: JSON.stringify({
-          username: this.config.username,
-          password: this.config.password,
-          _csrf: csrfToken,
-        }),
-      })
-      this.loginSetCookieHeader = loginResponse.headers.get('set-cookie')
+      await this.login()
     }
     catch (error) {
       Log.error(`[${this.name}] Error while logging in and retrieving session cookie: ${error}`)
@@ -70,72 +74,70 @@ module.exports = NodeHelper.create({
     }
   },
 
-  async getUnreadTopics() {
-    Log.debug(`[${this.name}] Fetching unread topics.`)
-    const apiResponse = await fetch(`${this.config.baseUrl}api/unread`, {
+  async fetchApi(path) {
+    const request = () => fetch(`${this.config.baseUrl}${path}`, {
       method: 'GET',
       headers: {
         Cookie: this.loginSetCookieHeader,
       },
     })
 
-    const data = await apiResponse.json()
+    const response = await request()
+    if (response.status !== 401 && response.status !== 403) {
+      return response
+    }
 
-    if (!data || !data.topics) {
-      Log.error(`[${this.name}] Error while fetching unread topics: ${apiResponse.statusText}`)
-      this.sendSocketNotification('MMM-FORUM_ERROR')
-    }
-    else {
-      Log.debug(`[${this.name}] Successfully fetched unread topics.`)
-      this.sendSocketNotification('MMM-FORUM_UNREAD_TOPICS', data.topics)
-    }
+    // Retry only once so invalid credentials cannot cause a login loop.
+    Log.debug(`[${this.name}] Session rejected, logging in again.`)
+    await this.login()
+    return request()
   },
 
-  async getUnreadNotifications() {
-    Log.debug(`[${this.name}] Fetching unread notifications.`)
-    const apiResponse = await fetch(`${this.config.baseUrl}api/notifications`, {
-      method: 'GET',
-      headers: {
-        Cookie: this.loginSetCookieHeader,
-      },
-    })
-
-    const data = await apiResponse.json()
-
-    if (!data || !data.notifications) {
-      Log.error(`[${this.name}] Error while fetching unread notifications: ${apiResponse.statusText}`)
-      this.sendSocketNotification('MMM-FORUM_ERROR')
-    }
-    else {
-      Log.debug(`[${this.name}] Successfully fetched unread notifications.`)
-      this.sendSocketNotification('MMM-FORUM_UNREAD_NOTIFICATIONS', data.notifications)
-    }
-  },
-
-  async getUnreadMessages() {
-    Log.debug(`[${this.name}] Fetching unread messages.`)
+  async fetchAndNotify({ label, path, property, notification }) {
+    Log.debug(`[${this.name}] Fetching unread ${label}.`)
     try {
-      const apiResponse = await fetch(`${this.config.baseUrl}api/user/${this.config.username.toLowerCase()}/chats`, {
-        method: 'GET',
-        headers: {
-          Cookie: this.loginSetCookieHeader,
-        },
-      })
-
+      const apiResponse = await this.fetchApi(path)
       const data = await apiResponse.json()
 
-      if (!data || !data.rooms) {
-        Log.error(`[${this.name}] Error while fetching unread messages: ${apiResponse.statusText}`)
+      if (!data || !data[property]) {
+        Log.error(`[${this.name}] Error while fetching unread ${label}: ${apiResponse.statusText}`)
         this.sendSocketNotification('MMM-FORUM_ERROR')
       }
       else {
-        Log.debug(`[${this.name}] Successfully fetched unread messages.`)
-        this.sendSocketNotification('MMM-FORUM_UNREAD_MESSAGES', data.rooms)
+        Log.debug(`[${this.name}] Successfully fetched unread ${label}.`)
+        this.sendSocketNotification(notification, data[property])
       }
     }
     catch (error) {
-      Log.error(`[${this.name}] Error while fetching unread messages: ${error}`)
+      Log.error(`[${this.name}] Error while fetching unread ${label}: ${error}`)
       this.sendSocketNotification('MMM-FORUM_ERROR')
     }
+  },
+
+  getUnreadTopics() {
+    return this.fetchAndNotify({
+      label: 'topics',
+      path: 'api/unread',
+      property: 'topics',
+      notification: 'MMM-FORUM_UNREAD_TOPICS',
+    })
+  },
+
+  getUnreadNotifications() {
+    return this.fetchAndNotify({
+      label: 'notifications',
+      path: 'api/notifications',
+      property: 'notifications',
+      notification: 'MMM-FORUM_UNREAD_NOTIFICATIONS',
+    })
+  },
+
+  getUnreadMessages() {
+    return this.fetchAndNotify({
+      label: 'messages',
+      path: `api/user/${this.config.username.toLowerCase()}/chats`,
+      property: 'rooms',
+      notification: 'MMM-FORUM_UNREAD_MESSAGES',
+    })
   },
 })

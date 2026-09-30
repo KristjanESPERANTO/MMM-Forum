@@ -24,12 +24,6 @@ function loadFrontendModule() {
 
 function loadNodeHelper(fetchImplementation, timers = {}) {
   const notifications = []
-  const helperContext = {
-    name: 'MMM-Forum',
-    sendSocketNotification(...notification) {
-      notifications.push(notification)
-    },
-  }
   const module = { exports: {} }
 
   loadModule('node_helper.js', {
@@ -51,7 +45,11 @@ function loadNodeHelper(fetchImplementation, timers = {}) {
     },
   })
 
-  Object.assign(helperContext, {
+  const helperContext = Object.assign(Object.create(module.exports), {
+    name: 'MMM-Forum',
+    sendSocketNotification(...notification) {
+      notifications.push(notification)
+    },
     config: {
       baseUrl: 'https://forum.example/',
       username: 'ExampleUser',
@@ -120,15 +118,53 @@ for (const { method, property, notification } of apiCases) {
 
     assert.deepEqual(notifications, [['MMM-FORUM_ERROR']])
   })
+
+  test(`${method} emits an error when fetch fails`, async () => {
+    const { helper, helperContext, notifications } = loadNodeHelper(async () => {
+      throw new Error('network unavailable')
+    })
+
+    await helper[method].call(helperContext)
+
+    assert.deepEqual(notifications, [['MMM-FORUM_ERROR']])
+  })
 }
 
-test('getUnreadMessages emits an error when fetch fails', async () => {
-  const { helper, helperContext, notifications } = loadNodeHelper(async () => {
-    throw new Error('network unavailable')
+test('getUnreadTopics logs in again once when the session is rejected', async () => {
+  let apiCalls = 0
+  const { helper, helperContext, notifications } = loadNodeHelper(async (url) => {
+    if (url.endsWith('login')) {
+      return { text: async () => '', headers: { get: () => 'session=fresh' } }
+    }
+
+    apiCalls += 1
+    if (apiCalls === 1) {
+      return { status: 403, json: async () => ({}), statusText: 'Forbidden' }
+    }
+    return { status: 200, json: async () => ({ topics: [{ id: 1 }] }) }
   })
 
-  await helper.getUnreadMessages.call(helperContext)
+  await helper.getUnreadTopics.call(helperContext)
 
+  assert.equal(apiCalls, 2)
+  assert.equal(helperContext.loginSetCookieHeader, 'session=fresh')
+  assert.deepEqual(notifications, [['MMM-FORUM_UNREAD_TOPICS', [{ id: 1 }]]])
+})
+
+test('getUnreadTopics does not retry more than once when the session stays rejected', async () => {
+  let apiCalls = 0
+  const { helper, helperContext, notifications } = loadNodeHelper(async (url) => {
+    if (url.endsWith('login')) {
+      return { text: async () => '', headers: { get: () => 'session=fresh' } }
+    }
+
+    apiCalls += 1
+    return { status: 403, json: async () => ({}), statusText: 'Forbidden' }
+  })
+
+  await helper.getUnreadTopics.call(helperContext)
+
+  assert.equal(apiCalls, 2)
   assert.deepEqual(notifications, [['MMM-FORUM_ERROR']])
 })
 
@@ -149,10 +185,8 @@ test('loginAndFetchData replaces the previous polling interval', async () => {
     },
   })
 
-  const context = Object.assign(Object.create(helper), helperContext)
-
-  await helper.loginAndFetchData.call(context)
-  await helper.loginAndFetchData.call(context)
+  await helper.loginAndFetchData.call(helperContext)
+  await helper.loginAndFetchData.call(helperContext)
 
   assert.equal(started.length, 2)
   assert.equal(cleared.at(-1), started[0])
