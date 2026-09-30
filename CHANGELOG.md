@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.1.2](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.1.1...v1.1.2) (2026-09-30)
+
+### Fixed
+
+* count only unread chat rooms ([7a6a3d7](https://github.com/KristjanESPERANTO/MMM-Forum/commit/7a6a3d7ccb86af1ffb11acb2ecefdaf3801a7b66))
+* handle API errors and expired sessions ([091a140](https://github.com/KristjanESPERANTO/MMM-Forum/commit/091a140d79afe9613f0ed58c9125fb3a93c91f8b))
+* stop stacking polling intervals ([1b3ee38](https://github.com/KristjanESPERANTO/MMM-Forum/commit/1b3ee38eddeff433f6b25f1ddd244bff6d1caca3))
+
+### Chores
+
+* remove JSON linting ([5fc891b](https://github.com/KristjanESPERANTO/MMM-Forum/commit/5fc891b3800c2c81542fbc24e8d31a43963a2221))
+* update devDependencies ([81dadcc](https://github.com/KristjanESPERANTO/MMM-Forum/commit/81dadccfa9246a34346e83d22fcaf573498d5d88))
+* update Node.js setup action ([0d87782](https://github.com/KristjanESPERANTO/MMM-Forum/commit/0d877825e46e91ad8a38c65b6f2e5114d940a83f))
+
+### Tests
+
+* add unit coverage ([c0115fe](https://github.com/KristjanESPERANTO/MMM-Forum/commit/c0115fea2d2a4ae33f8e4e5da695c4b167f1567d))
+
 ## [1.1.1](https://github.com/KristjanESPERANTO/MMM-Forum/compare/v1.1.0...v1.1.1) (2026-07-15)
 
 
